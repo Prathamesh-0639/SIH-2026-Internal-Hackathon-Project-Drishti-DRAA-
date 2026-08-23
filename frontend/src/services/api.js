@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://sih-2026-internal-hackathon-project-9y88.onrender.com',
+  baseURL: `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api`,
 });
 
 api.interceptors.request.use((config) => {
