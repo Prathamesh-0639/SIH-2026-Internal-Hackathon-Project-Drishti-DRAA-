@@ -109,7 +109,7 @@ const IntelligenceCenter = () => {
             </p>
             <div className="cta-row">
               <button className="btn btn-light text-primary fw-semibold" onClick={() => navigate("/scenario")}>Open scenario planner</button>
-              <button className="btn btn-outline-light" onClick={() => navigate("/dashboard")}>Open dashboard</button>
+              <button className="btn btn-outline-light" onClick= navigate('/dashboard')>Open dashboard</button>
             </div>
           </div>
           <div className="col-lg-4 mt-3 mt-lg-0">
