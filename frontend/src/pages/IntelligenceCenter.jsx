@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getInsights } from '../services/api';
 import { readCache, writeCache } from '../services/cache';
 import { getScenarioProfile, getStoredScenario } from '../data/scenarioProfile';
+import { useNavigate } from 'react-router-dom';
 
 const INTELLIGENCE_CACHE_KEY = 'drishti-intelligence-cache';
 
@@ -13,6 +14,7 @@ const getScenarioRiskIndex = (selectedScenario) => {
 };
 
 const IntelligenceCenter = () => {
+  const navigate = useNavigate();
   const [selectedScenario, setSelectedScenario] = useState(() => getStoredScenario());
   const [data, setData] = useState(() => readCache(INTELLIGENCE_CACHE_KEY) || null);
   const [loading, setLoading] = useState(() => !readCache(INTELLIGENCE_CACHE_KEY));
