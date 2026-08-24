@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { getInsights } from '../services/api';
 import { readCache, writeCache } from '../services/cache';
 import { getScenarioProfile, getStoredScenario } from '../data/scenarioProfile';
-import { useNavigate } from 'react-router-dom';
 
 const INTELLIGENCE_CACHE_KEY = 'drishti-intelligence-cache';
 
@@ -14,7 +13,6 @@ const getScenarioRiskIndex = (selectedScenario) => {
 };
 
 const IntelligenceCenter = () => {
-  const navigate = useNavigate();
   const [selectedScenario, setSelectedScenario] = useState(() => getStoredScenario());
   const [data, setData] = useState(() => readCache(INTELLIGENCE_CACHE_KEY) || null);
   const [loading, setLoading] = useState(() => !readCache(INTELLIGENCE_CACHE_KEY));
@@ -110,8 +108,8 @@ const IntelligenceCenter = () => {
               Based on current flood, disaster, and lightning event aggregation across India, combined with district-level operational readiness.
             </p>
             <div className="cta-row">
-              <button className="btn btn-light text-primary fw-semibold" onClick={() => navigate('/scenario')}>Open scenario planner</button>
-              <button className="btn btn-outline-light" onClick={() => navigate('/dashboard')}>Open dashboard</button>
+              <button className="btn btn-light text-primary fw-semibold" onClick={() => window.location.href = '/scenario'}>Open scenario planner</button>
+              <button className="btn btn-outline-light" onClick={() => window.location.href = '/dashboard'}>Open dashboard</button>
             </div>
           </div>
           <div className="col-lg-4 mt-3 mt-lg-0">
