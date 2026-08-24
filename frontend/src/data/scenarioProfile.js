@@ -172,6 +172,39 @@ export const getScenarioProfile = ({ district = 'Kolhapur', disasterType = 'Floo
   };
 };
 
+const normalizeStoredScenario = (scenario) => {
+  const fallback = getScenarioProfile({
+    district: scenario?.district || 'Kolhapur',
+    disasterType: scenario?.disasterType || 'Flood',
+    severity: scenario?.severity || 'High',
+  });
+
+  if (!scenario || !scenario.district || !scenario.disasterType || !scenario.severity) {
+    return fallback;
+  }
+
+  const resources = Array.isArray(scenario.resources) && scenario.resources.length
+    ? scenario.resources
+    : fallback.resources;
+
+  const actions = Array.isArray(scenario.actions) && scenario.actions.length
+    ? scenario.actions
+    : fallback.actions;
+
+  const summary = {
+    ...fallback.summary,
+    ...(scenario.summary || {}),
+  };
+
+  return {
+    ...fallback,
+    ...scenario,
+    resources,
+    actions,
+    summary,
+  };
+};
+
 export const getStoredScenario = () => {
   try {
     const raw = localStorage.getItem('drishti-scenario');
@@ -180,28 +213,14 @@ export const getStoredScenario = () => {
     }
 
     const parsed = JSON.parse(raw);
-    if (!parsed || !parsed.district || !parsed.disasterType || !parsed.severity) {
-      return getScenarioProfile({ district: 'Kolhapur', disasterType: 'Flood', severity: 'High' });
-    }
-
-    return getScenarioProfile({
-      district: parsed.district,
-      disasterType: parsed.disasterType,
-      severity: parsed.severity,
-    });
+    return normalizeStoredScenario(parsed);
   } catch {
     return getScenarioProfile({ district: 'Kolhapur', disasterType: 'Flood', severity: 'High' });
   }
 };
 
 export const setStoredScenario = (scenario) => {
-  const normalized = scenario && scenario.district && scenario.disasterType && scenario.severity
-    ? getScenarioProfile({
-        district: scenario.district,
-        disasterType: scenario.disasterType,
-        severity: scenario.severity,
-      })
-    : scenario;
+  const normalized = normalizeStoredScenario(scenario);
 
   localStorage.setItem('drishti-scenario', JSON.stringify(normalized));
   if (typeof window !== 'undefined') {

@@ -19,7 +19,10 @@ const ResourceStatus = () => {
     setSelectedScenario(stored);
   }, []);
 
-  const resources = useMemo(() => getScenarioProfile(selectedScenario).resources, [selectedScenario]);
+  const resources = useMemo(
+    () => selectedScenario?.resources || getScenarioProfile(selectedScenario).resources,
+    [selectedScenario]
+  );
 
   const openEditor = (resource) => {
     setSelected(resource);
@@ -61,6 +64,7 @@ const ResourceStatus = () => {
     };
 
     localStorage.setItem('drishti-scenario', JSON.stringify(updatedScenario));
+    window.dispatchEvent(new CustomEvent('drishti-scenario-updated', { detail: updatedScenario }));
     setSelectedScenario(updatedScenario);
     setSelected(null);
   };
