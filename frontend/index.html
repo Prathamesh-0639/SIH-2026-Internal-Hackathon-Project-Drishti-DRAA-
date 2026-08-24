@@ -8,6 +8,32 @@
   </head>
   <body>
     <div id="root"></div>
+    <script type="module">
+      // Set API base from Vite env and patch fetch so existing code using relative paths works
+      const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+      if (API_BASE) {
+        const _fetch = window.fetch.bind(window);
+        window.fetch = (input, init) => {
+          try {
+            // string URL case
+            if (typeof input === 'string') {
+              if (input.startsWith('/')) {
+                input = API_BASE.replace(/\/$/, '') + input;
+              }
+            // Request object case
+            } else if (input instanceof Request) {
+              const url = new URL(input.url, location.href);
+              if (url.pathname.startsWith('/')) {
+                input = new Request(API_BASE.replace(/\/$/, '') + url.pathname + url.search, input);
+              }
+            }
+          } catch (e) {
+            // if anything goes wrong, fall back to original fetch behavior
+          }
+          return _fetch(input, init);
+        };
+      }
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
